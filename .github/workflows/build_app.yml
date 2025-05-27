@@ -21,10 +21,16 @@ jobs:
         run: brew install gnupg
       - name: Install sourcery
         run: brew install sourcery
+      - name: Install SwiftLint
+        run: brew install swiftlint
       - name: Setup provisioning profile
+        if: env.CERTIFICATE_GPG_KEY != ''
         env:
           CERTIFICATE_GPG_KEY: ${{ secrets.CERTIFICATE_GPG_KEY }}
-        run: ./.github/scripts/decrypt_secrets.sh      
+        run: ./.github/scripts/decrypt_secrets.sh
+      - name: Skip provisioning profile (for contributors)
+        if: env.CERTIFICATE_GPG_KEY == ''
+        run: echo "CERTIFICATE_GPG_KEY not set, skipping code signing setup. Build will not be signed."
       - name: Create secrets xcconfig
         env:
           OCTO_CLIENT_ID: ${{ secrets.OCTO_CLIENT_ID }}
@@ -32,6 +38,10 @@ jobs:
         run: |
           echo "GITHUB_CLIENT_ID = \"${OCTO_CLIENT_ID}\"" >> Hadge/Secrets.xcconfig
           echo "GITHUB_CLIENT_SECRET = \"${OCTO_CLIENT_SECRET}\"" >> Hadge/Secrets.xcconfig
+      - name: Lint code
+        run: swiftlint || echo 'SwiftLint warnings found.'
+      - name: Run tests (placeholder)
+        run: echo 'No tests implemented yet.'
       - name: Build project
         run: ./.github/scripts/build_app.sh
       - name: Exporting .ipa

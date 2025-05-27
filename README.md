@@ -88,6 +88,30 @@ GitHub App Client Secret.
 Now you should be able to build without code signing errors and without modifying
 the project
 
+## ⚠️ Note for Open Source Contributors
+
+The GitHub Actions workflow for this project requires Apple code signing files and secrets (development.p12, team.mobileprovision, and CERTIFICATE_GPG_KEY) that are private to the app owner. If you are a contributor or forking this repo, the workflow will skip code signing and you will not be able to build a signed app or export an .ipa unless you provide your own Apple Developer credentials and update the secrets/files accordingly.
+
+You can still build and test the app locally on your own Mac by setting up your own signing in Xcode, or by following the manual setup instructions in this README.
+
+## Contributing
+
+We welcome contributions! Please:
+- Open issues for bugs or feature requests.
+- Fork the repo and submit pull requests.
+- Follow the code style (see below for linting).
+
+### Linting
+This project uses [SwiftLint](https://github.com/realm/SwiftLint) for code style. To check lint locally:
+
+```bash
+brew install swiftlint
+swiftlint
+```
+
+### Tests
+Currently, there are no automated tests. If you add new features, consider adding tests in a future PR.
+
 ## Privacy Policy
 
 This Privacy Policy describes how your personal information is handled in Hadge for iOS.
